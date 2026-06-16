@@ -1,3 +1,4 @@
+import { CURRENT_USER_ID } from "@/constants/auth";
 import { create } from "zustand";
 
 type User = {
@@ -5,8 +6,6 @@ type User = {
   name: string;
   email: string;
 };
-
-const USER_MOCK_UUID = "00000000-0000-0000-0000-000000000001";
 
 type UserStore = {
   user: User | null;
@@ -16,7 +15,7 @@ type UserStore = {
 
 export const useUserStore = create<UserStore>((set, get) => ({
   user: {
-    id: USER_MOCK_UUID,
+    id: CURRENT_USER_ID,
     name: "User",
     email: "user@example.com",
   },
