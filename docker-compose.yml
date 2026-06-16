@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build:
+      context: ../whatsapp-campaign-front-end
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    container_name: whatsapp-campaign-frontend
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      HOSTNAME: 0.0.0.0
+    networks:
+      - whatsapp-campaign-network
+    depends_on:
+      - api
+
+networks:
+  whatsapp-campaign-network:
+    external: true
+    name: wp-campaign-be_whatsapp-campaign-network
