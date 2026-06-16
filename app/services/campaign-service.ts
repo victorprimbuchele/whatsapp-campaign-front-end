@@ -12,9 +12,9 @@ export async function health() {
 // get campaigns
 export async function getCampaigns(params: {
   page: number;
-  limit: number;
-  search: string;
-  status: CampaignStatusKey;
+  limit?: number;
+  search?: string;
+  status?: CampaignStatusKey;
 }): Promise<PaginatedResponse<Campaign>> {
   const response = await api.get("/campaigns", { params });
   return response.data;
