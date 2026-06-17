@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# wp-campaign-fe
 
-## Getting Started
+Frontend da plataforma de campanhas WhatsApp, construído com [Next.js](https://nextjs.org/) (App Router), React Query, Zustand e shadcn/ui.
 
-First, run the development server:
+A aplicação roda em ambiente **dockerizado** e se conecta ao back-end [`wp-campaign-be`](../wp-campaign-be) via variável de ambiente `NEXT_PUBLIC_API_URL`.
+
+## Inicialização do Projeto
+
+### 1. Clonar o repositório
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <url-do-repositorio>
+cd <repositorio>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configurar variáveis de ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Desenvolvimento local (sem Docker no front):** use `http://localhost:3004` como `NEXT_PUBLIC_API_URL`.
 
-## Learn More
+### 3. Subir os containers (back-end primeiro)
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# 1. Na pasta do back-end
+docker compose up --build -d
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 2. Na pasta do front-end
+docker compose up --build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Para rodar em segundo plano:
 
-## Deploy on Vercel
+```bash
+docker compose up --build -d
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A aplicação ficará disponível em `http://localhost:3001`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 4. Verificar os serviços
+
+```bash
+docker compose ps
+docker compose logs -f frontend
+```
+
+---
+
+## Desenvolvimento Local (sem Docker no front)
+
+Se preferir rodar o Next.js diretamente na máquina, mantenha apenas a infraestrutura no Docker:
+
+```bash
+# Subir o back-end completo
+cd ../wp-campaign-be && docker compose up -d
+
+# Instalar dependências e iniciar o front localmente
+cd ../whatsapp-campaign-front-end
+npm install
+npm run dev
+```
+
+Nesse cenário, configure `NEXT_PUBLIC_API_URL=http://localhost:3004` no `.env.local`.
+
+## Estrutura do Projeto
+
+```
+app/
+├── campanhas/
+│   ├── [id]/          # Página de detalhes de campanha
+│   ├── nova/          # Wizard de criação de campanha
+│   └── page.tsx       # Listagem de campanhas
+├── hooks/             # React Query hooks (useCampaigns, useDeleteCampaign, useTemplates…)
+├── lib/               # query-client.ts, utils.ts
+├── services/          # Camada de acesso à API (campaignService, templateService…)
+├── stores/            # Stores Zustand (useCampaignStore, useWizardStore, useUserStore)
+├── types/             # Tipos TypeScript compartilhados
+├── providers.tsx      # QueryClientProvider + outros providers
+└── layout.tsx
+
+components/
+├── campaigns/         # Componentes específicos de campanhas
+├── shared/            # Componentes reutilizáveis (modais, tabelas, paginação…)
+└── ui/                # Componentes shadcn/ui
+
+constants/
+└── auth.ts            # CURRENT_USER_ID (stub de autenticação)
+
+cypress/
+├── component/         # Testes de componente isolados
+├── e2e/               # Testes end-to-end
+├── fixtures/
+└── support/
+```
