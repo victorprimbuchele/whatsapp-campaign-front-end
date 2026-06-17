@@ -11,6 +11,7 @@ import {
   AlertCircle,
   EllipsisVertical,
   Eye,
+  Pencil,
   Trash2,
 } from "lucide-react";
 
@@ -38,8 +39,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
+import { isCampaignEditable } from "@/lib/campaign-status";
+
 import { CampaignStatusBadge } from "./campaign-status-badge";
 import { DeleteCampaignModal } from "./delete-campaign-modal";
+import { EditCampaignModal } from "./edit-campaign-modal";
 import { CampaignWizard } from "./wizard/campaign-wizard";
 
 const PAGE_LIMIT = 20;
@@ -97,6 +101,7 @@ export const CampaignTable = () => {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [toDelete, setToDelete] = useState<Campaign | null>(null);
+  const [toEdit, setToEdit] = useState<Campaign | null>(null);
   const [wizardOpen, setWizardOpen] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -223,13 +228,19 @@ export const CampaignTable = () => {
                             <span className="sr-only">Ações</span>
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="w-44">
                           <DropdownMenuItem
                             onClick={() => router.push(`/campanhas/${campaign.id}`)}
                           >
-                            <Eye className="mr-2 h-4 w-8" />
+                            <Eye className="mr-2 h-4 w-4" />
                             Ver detalhes
                           </DropdownMenuItem>
+                          {isCampaignEditable(campaign.status.code) && (
+                            <DropdownMenuItem onClick={() => setToEdit(campaign)}>
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Editar
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-destructive focus:text-destructive"
@@ -277,6 +288,9 @@ export const CampaignTable = () => {
           )}
         </>
       )}
+
+      {/* Modal de edição */}
+      <EditCampaignModal campaign={toEdit} onClose={() => setToEdit(null)} />
 
       {/* Modal de exclusão */}
       <DeleteCampaignModal

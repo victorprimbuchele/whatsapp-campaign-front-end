@@ -7,4 +7,5 @@ export type CampaignStatusKey =
   | "paused"
   | "agendada"
   | "rascunho"
-  | "concluida";
+  | "concluida"
+  | "finished";

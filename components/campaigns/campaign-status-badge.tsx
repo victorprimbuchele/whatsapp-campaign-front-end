@@ -30,6 +30,10 @@ const STATUS_CONFIG: Record<string, StatusConfig> = {
     label: "Concluída",
     className: "bg-green-100 text-green-800 border-green-200",
   },
+  finished: {
+    label: "Concluída",
+    className: "bg-green-100 text-green-800 border-green-200",
+  },
   running: {
     label: "Enviando",
     className: "bg-orange-100 text-orange-800 border-orange-200",

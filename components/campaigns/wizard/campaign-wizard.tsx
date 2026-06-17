@@ -85,6 +85,19 @@ export const CampaignWizard = ({ onClose }: CampaignWizardProps) => {
     if (validate()) nextStep();
   };
 
+  function toISOLocalString(date: Date): string {
+    const pad = (n: number): string => n.toString().padStart(2, "0");
+
+    return (
+      `${date.getFullYear()}-` +
+      `${pad(date.getMonth() + 1)}-` +
+      `${pad(date.getDate())}T` +
+      `${pad(date.getHours())}:` +
+      `${pad(date.getMinutes())}:` +
+      `${pad(date.getSeconds())}`
+    );
+  }
+
   const buildPayload = (overrideSendType?: "draft") => {
     const effectiveSendType = overrideSendType ?? sendType;
     return {
@@ -94,10 +107,15 @@ export const CampaignWizard = ({ onClose }: CampaignWizardProps) => {
       statusId:
         effectiveSendType === "draft"
           ? STATUS_ID_DRAFT
-          : effectiveSendType === "scheduled"
+          : effectiveSendType === "scheduled" || effectiveSendType === "now"
             ? STATUS_ID_SCHEDULED
             : undefined,
-      scheduleAt: effectiveSendType === "scheduled" ? scheduledAt : undefined,
+      scheduleAt:
+        effectiveSendType === "scheduled"
+          ? scheduledAt
+          : effectiveSendType === "now"
+            ? toISOLocalString(new Date())
+            : undefined,
       idempotencyKey: crypto.randomUUID(),
     };
   };
