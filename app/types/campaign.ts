@@ -1,18 +1,17 @@
+import { CampaignStatusMeta } from "./campaign-status-meta";
+
 export type Campaign = {
   id: string;
   name: string;
-  status: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date | null;
-    sortOrder: number;
-    code: string;
-  };
+  status: CampaignStatusMeta;
   userId: string;
   templateId: string;
-  phoneNumbers: string[];
   variables: Record<string, string>;
-  scheduleAt?: Date | null;
-  createdAt: Date;
-  updatedAt?: Date | null;
+  phoneNumbers: string[];
+  scheduleAt?: string | null;
+  createdAt: string;
+  updatedAt?: string | null;
+  percentSent: number;
+  percentDelivered: number;
+  percentRead: number;
 };

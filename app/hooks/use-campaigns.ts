@@ -8,13 +8,14 @@ const useCampaigns = (params: {
   search?: string;
   status?: CampaignStatusKey;
 }) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["campaigns", params],
     queryFn: () => getCampaigns(params),
     placeholderData: keepPreviousData,
+    refetchOnMount: true,
   });
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch };
 };
 
 export default useCampaigns;

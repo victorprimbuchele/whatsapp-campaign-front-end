@@ -1,15 +1,15 @@
-import { CURRENT_USER_ID } from "@/constants/auth";
 import { create } from "zustand";
-import { Campaign } from "../types/campaign";
 
 type CampaignStore = {
-  campaign: Campaign | null;
-  setCampaign: (campaign: Campaign) => void;
-  getCampaign: () => Campaign | null;
+  selectedCampaignId: string | null;
+  searchTerm: string;
+  setSelectedCampaignId: (id: string | null) => void;
+  setSearchTerm: (term: string) => void;
 };
 
-export const useCampaignStore = create<CampaignStore>((set, get) => ({
-  campaign: null,
-  setCampaign: (campaign: Campaign) => set({ campaign }),
-  getCampaign: () => get().campaign,
+export const useCampaignStore = create<CampaignStore>((set) => ({
+  selectedCampaignId: null,
+  searchTerm: "",
+  setSelectedCampaignId: (id) => set({ selectedCampaignId: id }),
+  setSearchTerm: (term) => set({ searchTerm: term }),
 }));

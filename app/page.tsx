@@ -1,14 +1,5 @@
-import { CampaignTable } from "@/components/campaigns/campaign-table";
-import { PageHeader } from "@/components/shared/page-header";
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
-export default function CampanhasPage() {
-  return (
-    <>
-      <PageHeader title="Campanhas" className="flex flex-row justify-between items-center">
-        <Button variant="outline">Nova Campanha</Button>
-      </PageHeader>
-      <CampaignTable />
-    </>
-  );
+export default function HomePage() {
+  redirect("/campanhas");
 }

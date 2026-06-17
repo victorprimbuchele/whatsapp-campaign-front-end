@@ -1,7 +1,10 @@
-export type CampaignStatusKey = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date | null;
-  sortOrder: number;
-  code: string;
-};
+export type CampaignStatusKey =
+  | "scheduled"
+  | "draft"
+  | "completed"
+  | "running"
+  | "cancelled"
+  | "paused"
+  | "agendada"
+  | "rascunho"
+  | "concluida";
